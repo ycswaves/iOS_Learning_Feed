@@ -17,6 +17,26 @@ class MasterViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=76ahy5pc25p4v4f8tkqtkzb3&q=Toy+Story+3&page_limit=1")
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithURL(url!, completionHandler: {
+            (data, response, err) -> Void in
+            
+            if err != nil {
+                println("error:", err)
+            } else {
+                //println(NSString(data:data, encoding: NSUTF8StringEncoding))
+                let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
+                
+                if jsonResult.count > 0 {
+                    if let resultErr = jsonResult["error"] as? String {
+                        println(resultErr)
+                    }
+                }
+            }
+        })
+        task.resume()
     }
 
     override func didReceiveMemoryWarning() {
