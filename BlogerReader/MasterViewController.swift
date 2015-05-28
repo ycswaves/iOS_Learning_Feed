@@ -18,7 +18,7 @@ class MasterViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = NSURL(string: "http://api.rottentomatoes.com/api/public/v1.0/movies.json?apikey=76ahy5pc25p4v4f8tkqtkzb3&q=Toy+Story+3&page_limit=1")
+        let url = NSURL(string: "https://www.googleapis.com/blogger/v3/blogs/10861780/posts?key=AIzaSyAM-uwxaBRPK_9APEffaRM449n0iC1huU8")
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithURL(url!, completionHandler: {
             (data, response, err) -> Void in
@@ -30,8 +30,17 @@ class MasterViewController: UITableViewController {
                 let jsonResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
                 
                 if jsonResult.count > 0 {
-                    if let resultErr = jsonResult["error"] as? String {
-                        println(resultErr)
+                    if let items = jsonResult["items"] as? NSArray {
+                        for item in items {
+                            //println(item)
+                            if let title = item["title"] as? String {
+                                println(title)
+                            }
+                            
+                            if let content = item["content"] as? String {
+                                println(content)
+                            }
+                        }
                     }
                 }
             }
